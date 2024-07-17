@@ -10,6 +10,16 @@ import {
 
 export default function App() {
   const [justifyContent, setJustifyContent] = useState("flex-start");
+  const [pressedButton, setPressedButton] = useState(null);
+
+  const justifyContentOptions = [
+    "flex-start",
+    "flex-end",
+    "center",
+    "space-between",
+    "space-around",
+    "space-evenly",
+  ];
 
   function handleButtonClick(position) {
     setJustifyContent(position);
@@ -30,42 +40,21 @@ export default function App() {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("flex-start")}
-        >
-          <Text style={styles.buttonText}>flex-start</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("flex-end")}
-        >
-          <Text style={styles.buttonText}>flex-end</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("center")}
-        >
-          <Text style={styles.buttonText}>center</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("space-between")}
-        >
-          <Text style={styles.buttonText}>space-between</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("space-around")}
-        >
-          <Text style={styles.buttonText}>space-around</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("space-evenly")}
-        >
-          <Text style={styles.buttonText}>space-evenly</Text>
-        </Pressable>
+        {justifyContentOptions.map((position) => (
+          <Pressable
+            key={position}
+            style={({ pressed }) => [
+              styles.button,
+              pressed && styles.buttonPressed,
+              pressedButton === position && styles.buttonActive,
+            ]}
+            onPressIn={() => setPressedButton(position)}
+            onPressOut={() => setPressedButton(null)}
+            onPress={() => handleButtonClick(position)}
+          >
+            <Text style={styles.buttonText}>{position}</Text>
+          </Pressable>
+        ))}
       </View>
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -99,6 +88,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "blue",
     borderWidth: 1,
+  },
+  buttonPressed: {
+    backgroundColor: "deepskyblue",
+  },
+  buttonActive: {
+    borderColor: "darkblue",
   },
   buttonText: {
     fontSize: 17,
