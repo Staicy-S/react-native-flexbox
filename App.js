@@ -1,23 +1,24 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StatusBar,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { SafeAreaView, View, Text, StatusBar, StyleSheet } from "react-native";
+
+import JustifyContentButtons from "./components/JustifyContentButtons";
+import AlignItemsButtons from "./components/AlignItemsButtons";
 
 export default function App() {
   const [justifyContent, setJustifyContent] = useState("flex-start");
-
-  function handleButtonClick(position) {
-    setJustifyContent(position);
-  }
+  const [alignItems, setAlignItems] = useState("stretch");
+  const [pressedJustifyButton, setPressedJustifyButton] = useState(null);
+  const [pressedAlignButton, setPressedAlignButton] = useState(null);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ justifyContent: justifyContent, flex: 1 }}>
+      <View
+        style={{
+          justifyContent: justifyContent,
+          alignItems: alignItems,
+          flex: 1,
+        }}
+      >
         <View style={[styles.box, { backgroundColor: "#006BB8" }]}>
           <Text style={styles.text}>1</Text>
         </View>
@@ -29,44 +30,23 @@ export default function App() {
         </View>
       </View>
 
-      <View style={styles.buttonContainer}>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("flex-start")}
-        >
-          <Text style={styles.buttonText}>flex-start</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("flex-end")}
-        >
-          <Text style={styles.buttonText}>flex-end</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("center")}
-        >
-          <Text style={styles.buttonText}>center</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("space-between")}
-        >
-          <Text style={styles.buttonText}>space-between</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("space-around")}
-        >
-          <Text style={styles.buttonText}>space-around</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={() => handleButtonClick("space-evenly")}
-        >
-          <Text style={styles.buttonText}>space-evenly</Text>
-        </Pressable>
-      </View>
+      <Text style={styles.title}>Justify Content</Text>
+      <JustifyContentButtons
+        onPress={(position) => {
+          setPressedJustifyButton(position);
+          if (position) setJustifyContent(position);
+        }}
+        activeButton={pressedJustifyButton}
+      />
+
+      <Text style={styles.title}>Align Items</Text>
+      <AlignItemsButtons
+        onPress={(position) => {
+          setPressedAlignButton(position);
+          if (position) setAlignItems(position);
+        }}
+        activeButton={pressedAlignButton}
+      />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -87,11 +67,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-  buttonContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
   button: {
     backgroundColor: "lightblue",
     padding: 8,
@@ -100,7 +75,10 @@ const styles = StyleSheet.create({
     borderColor: "blue",
     borderWidth: 1,
   },
-  buttonText: {
-    fontSize: 17,
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 10,
   },
 });
